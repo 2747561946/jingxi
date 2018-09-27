@@ -27,6 +27,15 @@ class CodeController
         // 生成视图
         @mkdir(ROOT . 'views/'.$tableName,0777);
 
+        // 取出表中所有字段
+        $sql = "SHOW FULL FIELDS FROM $tableName";
+        $db = \libs\Db::make();
+        // 预处理
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $fields = $stmt->fetchAll( \PDO::FETCH_ASSOC);
+
+
         // create.html
         ob_start();
         include(ROOT . 'templates/create.html');
@@ -44,5 +53,9 @@ class CodeController
         include(ROOT.'templates/index.html');
         $str = ob_get_clean();
         file_put_contents(ROOT.'views/'.$tableName.'/index.html',$str);
+
+
+        var_dump($fields);
+        die;
     }
 }
